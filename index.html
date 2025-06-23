@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TecInfra - Sistemas de Manutenção Inteligentes</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --azul-senai-claro: #4A9EFF;
+            --azul-senai-escuro: #1B4B8C;
+            --azul-hover: #2B5AA0;
+            --branco: #FFFFFF;
+            --cinza-claro: #F8FAFC;
+            --texto-escuro: #1A202C;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--texto-escuro);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--azul-senai-escuro), var(--azul-senai-claro));
+            color: var(--branco);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--branco), var(--azul-senai-claro));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: var(--branco);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        nav a:hover {
+            color: var(--azul-senai-claro);
+            transform: translateY(-2px);
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--azul-senai-claro);
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--azul-senai-escuro), var(--azul-senai-claro));
+            color: var(--branco);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="40" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="40" cy="80" r="1.5" fill="rgba(255,255,255,0.1)"/></svg>');
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            100% { transform: translateY(-100px) rotate(360deg); }
+        }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            z-index: 2;
+            position: relative;
+        }
+
+        .hero-text h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            opacity: 0;
+            animation: slideInLeft 1s ease 0.5s forwards;
+        }
+
+        .hero-text p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: slideInLeft 1s ease 0.7s forwards;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            opacity: 0;
+            animation: slideInLeft 1s ease 0.9s forwards;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--azul-senai-claro), var(--branco));
+            color: var(--azul-senai-escuro);
+            box-shadow: 0 10px 30px rgba(74, 158, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(74, 158, 255, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--branco);
+            border: 2px solid var(--branco);
+        }
+
+        .btn-secondary:hover {
+            background: var(--branco);
+            color: var(--azul-senai-escuro);
+            transform: translateY(-3px);
+        }
+
+        .hero-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            animation: slideInRight 1s ease 0.5s forwards;
+        }
+
+        .dashboard-mockup {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: pulse 3s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .dashboard-items {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .dashboard-item {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-item:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .dashboard-item i {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: var(--azul-senai-claro);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 6rem 0;
+            background: var(--cinza-claro);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--azul-senai-escuro);
+            margin-bottom: 1rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--branco);
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(74, 158, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .feature-card:hover::before {
+            left: 100%;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(74, 158, 255, 0.2);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(45deg, var(--azul-senai-claro), var(--azul-senai-escuro));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+            color: var(--branco);
+        }
+
+        .feature-card h3 {
+            color: var(--azul-senai-escuro);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        /* Stats Section */
+        .stats {
+            background: linear-gradient(135deg, var(--azul-senai-escuro), var(--azul-senai-claro));
+            color: var(--branco);
+            padding: 4rem 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .stat-item h3 {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-item p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 6rem 0;
+            background: var(--cinza-claro);
+            text-align: center;
+        }
+
+        .cta-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .cta-content h2 {
+            font-size: 2.5rem;
+            color: var(--azul-senai-escuro);
+            margin-bottom: 1rem;
+        }
+
+        .cta-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--azul-senai-escuro);
+            color: var(--branco);
+            padding: 3rem 0 1rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            color: var(--azul-senai-claro);
+        }
+
+        .footer-section a {
+            color: var(--branco);
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--azul-senai-claro);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0.8;
+        }
+
+        /* Animations */
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-text h1 {
+                font-size: 2.5rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            nav ul {
+                display: none;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Floating Elements */
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-element {
+            position: absolute;
+            background: rgba(74, 158, 255, 0.1);
+            border-radius: 50%;
+            animation: floatRandom 15s infinite linear;
+        }
+
+        @keyframes floatRandom {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Elements -->
+    <div class="floating-elements" id="floatingElements"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">TecInfra</div>
+                <nav>
+                    <ul>
+                        <li><a href="#home">Início</a></li>
+                        <li><a href="#features">Soluções</a></li>
+                        <li><a href="#about">Sobre</a></li>
+                        <li><a href="#contact">Contato</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>Manutenção <span style="color: var(--azul-senai-claro);">Inteligente</span></h1>
+                    <p>Revolucione a gestão de manutenção da sua empresa com nosso sistema completo de chamados, equipamentos e técnicos. Eficiência máxima, tempo mínimo.</p>
+                    <div class="cta-buttons">
+                        <a href="#demo" class="btn btn-primary">
+                            <i class="fas fa-play"></i>
+                            Ver Demo
+                        </a>
+                        <a href="#contact" class="btn btn-secondary">
+                            <i class="fas fa-phone"></i>
+                            Falar Conosco
+                        </a>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="dashboard-mockup">
+                        <div class="dashboard-items">
+                            <div class="dashboard-item">
+                                <i class="fas fa-tools"></i>
+                                <p>Equipamentos</p>
+                            </div>
+                            <div class="dashboard-item">
+                                <i class="fas fa-headset"></i>
+                                <p>Chamados</p>
+                            </div>
+                            <div class="dashboard-item">
+                                <i class="fas fa-users"></i>
+                                <p>Técnicos</p>
+                            </div>
+                            <div class="dashboard-item">
+                                <i class="fas fa-chart-line"></i>
+                                <p>Relatórios</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>Soluções Completas</h2>
+                <p>Tudo que você precisa para uma manutenção eficiente</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <h3>Gestão de Equipamentos</h3>
+                    <p>Controle total do seu parque de equipamentos com histórico completo de manutenções, peças e performance.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-ticket-alt"></i>
+                    </div>
+                    <h3>Sistema de Chamados</h3>
+                    <p>Abertura, acompanhamento e resolução de chamados com priorização automática e notificações em tempo real.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-user-cog"></i>
+                    </div>
+                    <h3>Gestão de Técnicos</h3>
+                    <p>Otimize a alocação de técnicos com base em especialização, localização e disponibilidade.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>App Mobile</h3>
+                    <p>Aplicativo para técnicos com funcionalidades offline, fotos, assinaturas digitais e sincronização automática.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h3>Relatórios Avançados</h3>
+                    <p>Dashboards interativos com KPIs, análises de performance e previsões de manutenção preventiva.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-cloud"></i>
+                    </div>
+                    <h3>Cloud Segura</h3>
+                    <p>Dados seguros na nuvem com backup automático, alta disponibilidade e acesso de qualquer lugar.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <h3 class="counter" data-target="500">0</h3>
+                    <p>Empresas Atendidas</p>
+                </div>
+                <div class="stat-item">
+                    <h3 class="counter" data-target="95">0</h3>
+                    <p>% Satisfação</p>
+                </div>
+                <div class="stat-item">
+                    <h3 class="counter" data-target="24">0</h3>
+                    <p>Horas Suporte</p>
+                </div>
+                <div class="stat-item">
+                    <h3 class="counter" data-target="10">0</h3>
+                    <p>Anos Experiência</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="contact">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Pronto para Revolucionar sua Manutenção?</h2>
+                <p>Junte-se a centenas de empresas que já transformaram seus processos com a TecInfra</p>
+                <a href="#" class="btn btn-primary" onclick="startDemo()">
+                    <i class="fas fa-rocket"></i>
+                    Começar Agora
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>TecInfra</h3>
+                    <p>Revolucionando a manutenção industrial com tecnologia de ponta e soluções inteligentes.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Soluções</h3>
+                    <a href="#">Gestão de Equipamentos</a>
+                    <a href="#">Sistema de Chamados</a>
+                    <a href="#">App Mobile</a>
+                    <a href="#">Relatórios</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Empresa</h3>
+                    <a href="#">Sobre Nós</a>
+                    <a href="#">Clientes</a>
+                    <a href="#">Carreira</a>
+                    <a href="#">Blog</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Contato</h3>
+                    <a href="tel:+5511999999999"><i class="fas fa-phone"></i> (11) 99999-9999</a>
+                    <a href="mailto:contato@tecinfra.com.br"><i class="fas fa-envelope"></i> contato@tecinfra.com.br</a>
+                    <a href="#"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 TecInfra. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Floating Elements Animation
+        function createFloatingElements() {
+            const container = document.getElementById('floatingElements');
+            
+            setInterval(() => {
+                const element = document.createElement('div');
+                element.className = 'floating-element';
+                
+                const size = Math.random() * 60 + 20;
+                element.style.width = size + 'px';
+                element.style.height = size + 'px';
+                element.style.left = Math.random() * window.innerWidth + 'px';
+                element.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                element.style.animationDelay = Math.random() * 2 + 's';
+                
+                container.appendChild(element);
+                
+                setTimeout(() => {
+                    container.removeChild(element);
+                }, 15000);
+            }, 3000);
+        }
+
+        // Counter Animation
+        function animateCounters() {
+            const counters = document.querySelectorAll('.counter');
+            
+            counters.forEach(counter => {
+                const target = parseInt(counter.getAttribute('data-target'));
+                const duration = 2000;
+                const step = target / (duration / 16);
+                let current = 0;
+                
+                const timer = setInterval(() => {
+                    current += step;
+                    if (current >= target) {
+                        counter.textContent = target;
+                        clearInterval(timer);
+                    } else {
+                        counter.textContent = Math.floor(current);
+                    }
+                }, 16);
+            });
+        }
+
+        // Scroll Animation for Feature Cards
+        function handleScrollAnimations() {
+            const elements = document.querySelectorAll('.fade-in');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animationDelay = Math.random() * 0.5 + 's';
+                        entry.target.classList.add('fade-in');
+                    }
+                });
+            });
+            
+            elements.forEach(element => {
+                observer.observe(element);
+            });
+        }
+
+        // Smooth Scrolling
+        function smoothScroll() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        }
+
+        // Header Background on Scroll
+        function handleHeaderScroll() {
+            const header = document.querySelector('header');
+            
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 100) {
+                    header.style.background = 'rgba(27, 75, 140, 0.95)';
+                    header.style.backdropFilter = 'blur(20px)';
+                } else {
+                    header.style.background = 'linear-gradient(135deg, var(--azul-senai-escuro), var(--azul-senai-claro))';
+                    header.style.backdropFilter = 'blur(10px)';
+                }
+            });
+        }
+
+        // Dashboard Items Animation
+        function animateDashboardItems() {
+            const items = document.querySelectorAll('.dashboard-item');
+            
+            items.forEach((item, index) => {
+                setTimeout(() => {
+                    item.style.animation = 'fadeInUp 0.6s ease forwards';
+                }, index * 200);
+            });
+        }
+
+        // Start Demo Function
+        function startDemo() {
+            alert('🚀 Em breve você será redirecionado para nossa demonstração interativa!\n\nEnquanto isso, entre em contato conosco para agendar uma apresentação personalizada.');
+        }
+
+        // Particle Effect on Click
+        function createParticleEffect(e) {
+            const particle = document.createElement('div');
+            particle.style.position = 'fixed';
+            particle.style.left = e.clientX + 'px';
+            particle.style.top = e.clientY + 'px';
+            particle.style.width = '6px';
+            particle.style.height = '6px';
+            particle.style.background = 'var(--azul-senai-claro)';
+            particle.style.borderRadius = '50%';
+            particle.style.pointerEvents = 'none';
+            particle.style.zIndex = '9999';
+            particle.style.animation = 'particleExplosion 0.6s ease-out forwards';
+            
+            document.body.appendChild(particle);
+            
+            setTimeout(() => {
+                document.body.removeChild(particle);
+            }, 600);
+        }
+
+        // Add particle effect CSS animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes particleExplosion {
+                0% {
+                    transform: scale(1);
+                    opacity: 1;
+                }
+                100% {
+                    transform: scale(0) translateY(-30px);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            createFloatingElements();
+            handleScrollAnimations();
+            smoothScroll();
+            handleHeaderScroll();
+            animateDashboardItems();
+            
+            // Animate counters when stats section is visible
+            const statsSection = document.querySelector('.stats');
+            const statsObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animateCounters();
+                        statsObserver.unobserve(entry.target);
+                    }
+                });
+            });
+            statsObserver.observe(statsSection);
+            
+            // Add click particle effect to buttons
+            document.querySelectorAll('.btn').forEach(btn => {
+                btn.addEventListener('click', createParticleEffect);
+            });
+        });
+
+        // Add some interactive hover effects
+        document.addEventListener('mousemove', (e) => {
+            const hero = document.querySelector('.hero');
+            const rect = hero.getBoundingClientRect();
+            
+            if (e.clientY >= rect.top && e.clientY <= rect.bottom) {
+                const x = (e.clientX / window.innerWidth) * 2 - 1;
+                const y = (e.clientY / window.innerHeight) * 2 - 1;
+                
+                hero.style.transform = `perspective(1000px) rotateY(${x * 2}deg) rotateX(${y * 2}deg)`;
+            }
+        });
+    </script>
+</body>
+</html>
